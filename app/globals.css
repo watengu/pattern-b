@@ -1,0 +1,44 @@
+:root {
+  --ink: #14161c;
+  --line: rgba(20, 22, 28, 0.12);
+  --bg: #faf8f4;
+  --accent: #c4502e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.bd { min-height: 100vh; }
+.bd-head { position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); z-index: 5; }
+.bd-head-in { max-width: 880px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.bd-logo { font-weight: 700; font-size: 17px; letter-spacing: 0.04em; text-decoration: none; }
+.bd-logo span { color: var(--accent); }
+.bd-post { background: var(--ink); color: #fff; border-radius: 999px; padding: 8px 18px; font-size: 13px; text-decoration: none; font-weight: 600; }
+.bd-hero { padding: 40px 0 8px; }
+.bd-hero h1 { font-size: clamp(24px, 5vw, 34px); font-weight: 700; line-height: 1.5; margin: 0; }
+.bd-hero p { color: rgba(20,22,28,0.65); font-size: 14px; margin-top: 10px; line-height: 1.9; }
+.bd-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0 6px; }
+.bd-chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; font-size: 13px; text-decoration: none; }
+.bd-chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.bd-card-post { background: #fff; border-radius: 16px; border: 1px solid rgba(20,22,28,0.08); padding: 18px 20px; }
+.bd-form { background: #fff; border: 1px solid rgba(20,22,28,0.08); border-radius: 16px; padding: 20px; margin-top: 18px; }
+.bd-form h2 { font-size: 16px; margin: 0 0 14px; }
+.bd-form label { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; font-weight: 700; color: rgba(20,22,28,0.7); }
+.bd-form input, .bd-form select, .bd-form textarea {
+  font: inherit; font-size: 14px; font-weight: 400; color: var(--ink);
+  border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #fff;
+}
+.bd-form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .bd-form-row { grid-template-columns: 1fr; } }
+.bd-form-body { margin-top: 12px; }
+.bd-submit {
+  margin-top: 14px; width: 100%; background: var(--accent); color: #fff; border: none;
+  border-radius: 999px; padding: 13px 18px; font-size: 14.5px; font-weight: 700; cursor: pointer;
+}
+.bd-footer { border-top: 1px solid var(--line); padding: 22px 0 40px; font-size: 12px; color: rgba(20,22,28,0.5); line-height: 1.9; }
