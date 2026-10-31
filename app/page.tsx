@@ -3,6 +3,7 @@ import { PostForm } from "@/components/post-form";
 import { getLivePosts } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "default-no-store";
 
 export default async function BoardPage() {
   const posts = await getLivePosts();

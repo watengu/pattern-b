@@ -5,6 +5,7 @@ import { GENRES } from "@/lib/data";
 import { getLivePosts } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "default-no-store";
 
 export default async function GenrePage({
   params,
