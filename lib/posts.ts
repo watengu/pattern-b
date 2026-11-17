@@ -31,17 +31,28 @@ function normalize(row: Record<string, unknown>): DbPost {
   };
 }
 
+export type PostSort = "new" | "expiry";
+
 /** Live posts only: the TTL filter (expires_at > now) is the auto-delete rule. */
-export async function getLivePosts(genre?: string): Promise<DbPost[]> {
+export async function getLivePosts(genre?: string, sort: PostSort = "new"): Promise<DbPost[]> {
   if (!sql) return [];
   try {
-    const rows = genre
-      ? await sql`select id, author_id, author_name, genre, kind, tier, body, created_at, expires_at
-                  from posts where expires_at > now() and genre = ${genre}
-                  order by created_at desc limit 100`
-      : await sql`select id, author_id, author_name, genre, kind, tier, body, created_at, expires_at
-                  from posts where expires_at > now()
-                  order by created_at desc limit 100`;
+    const rows =
+      sort === "expiry"
+        ? genre
+          ? await sql`select id, author_id, author_name, genre, kind, tier, body, created_at, expires_at
+                      from posts where expires_at > now() and genre = ${genre}
+                      order by expires_at asc limit 100`
+          : await sql`select id, author_id, author_name, genre, kind, tier, body, created_at, expires_at
+                      from posts where expires_at > now()
+                      order by expires_at asc limit 100`
+        : genre
+          ? await sql`select id, author_id, author_name, genre, kind, tier, body, created_at, expires_at
+                      from posts where expires_at > now() and genre = ${genre}
+                      order by created_at desc limit 100`
+          : await sql`select id, author_id, author_name, genre, kind, tier, body, created_at, expires_at
+                      from posts where expires_at > now()
+                      order by created_at desc limit 100`;
     return (rows as Record<string, unknown>[]).map(normalize);
   } catch {
     return [];

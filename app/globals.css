@@ -42,3 +42,21 @@ a { color: inherit; }
   border-radius: 999px; padding: 13px 18px; font-size: 14.5px; font-weight: 700; cursor: pointer;
 }
 .bd-footer { border-top: 1px solid var(--line); padding: 22px 0 40px; font-size: 12px; color: rgba(20,22,28,0.5); line-height: 1.9; }
+.bd-form-fixed { font-size: 14px; font-weight: 700; color: var(--ink); border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #faf8f4; }
+.bd-notices { margin-top: 14px; font-size: 12.5px; line-height: 1.9; color: rgba(20,22,28,0.6); }
+.bd-notices p { margin: 0; }
+.bd-sortbar { display: flex; gap: 10px; align-items: center; margin-top: 16px; font-size: 14px; }
+.bd-sortbar a { text-decoration: none; color: rgba(20,22,28,0.6); }
+.bd-sortbar a.on { color: var(--accent); font-weight: 700; }
+.bd-catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-bottom: 56px; margin-top: 18px; }
+@media (max-width: 640px) { .bd-catalog { grid-template-columns: 1fr; } }
+.bd-tile { background: #fff; border-radius: 16px; border: 1px solid rgba(20,22,28,0.08); padding: 14px 16px; }
+.bd-tile-body { font-size: 13.5px; line-height: 1.8; margin: 10px 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.bd-index { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; }
+@media (max-width: 640px) { .bd-index { grid-template-columns: 1fr; } }
+.bd-index-cell { background: #fff; border: 1px solid rgba(20,22,28,0.08); border-radius: 16px; padding: 20px; text-decoration: none; display: flex; flex-direction: column; gap: 14px; }
+.bd-index-genre { font-size: 22px; font-weight: 700; }
+.bd-index-rep { display: flex; align-items: center; gap: 10px; }
+.bd-index-meta { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: rgba(20,22,28,0.55); border-top: 1px solid var(--line); padding-top: 12px; }
+.bd-index-go { color: var(--accent); font-weight: 700; }
+.bd-index-note { font-size: 13px; color: rgba(20,22,28,0.55); line-height: 1.9; margin: 22px 0 30px; }

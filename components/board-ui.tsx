@@ -2,18 +2,89 @@ import Link from "next/link";
 import { GENRES, authorById, ageLabel, remaining } from "@/lib/data";
 import type { DbPost } from "@/lib/posts";
 
-export function BoardHead() {
+export function BoardHead({ hidePost }: { hidePost?: boolean }) {
   return (
     <header className="bd-head">
       <div className="bd-head-in">
         <Link href="/" className="bd-logo">
           PatternB <span>Board</span>
         </Link>
-        <a className="bd-post" href="#post-form">
-          投稿する
-        </a>
+        {!hidePost && (
+          <a className="bd-post" href="#post-form">
+            投稿する
+          </a>
+        )}
       </div>
     </header>
+  );
+}
+
+export function BoardNotices() {
+  return (
+    <div className="bd-notices">
+      <p>・投稿は自動で消えます（ゲスト1時間／ログイン会員8時間）。残り時間は各投稿に表示されます。</p>
+      <p>・会員の投稿は、その人のプロフィールに紐づきます。名前からプロフィールへ進めます。</p>
+      <p>・並び替えは「新順／残り時間順」、見た目は「カタログ」にも切り替えられます。</p>
+    </div>
+  );
+}
+
+export function SortBar({
+  genre,
+  sort,
+  view,
+}: {
+  genre: string;
+  sort: "new" | "expiry";
+  view: "list" | "catalog";
+}) {
+  const base = `/board/${encodeURIComponent(genre)}`;
+  const href = (s: "new" | "expiry", v: "list" | "catalog") => {
+    const q = new URLSearchParams();
+    if (s !== "new") q.set("sort", s);
+    if (v !== "list") q.set("view", v);
+    const qs = q.toString();
+    return qs ? `${base}?${qs}` : base;
+  };
+  return (
+    <nav className="bd-sortbar" aria-label="並び替えと表示">
+      <Link href={href("new", view)} className={sort === "new" ? "on" : undefined}>
+        新順
+      </Link>
+      <span aria-hidden>｜</span>
+      <Link href={href("expiry", view)} className={sort === "expiry" ? "on" : undefined}>
+        残り時間順
+      </Link>
+      <span aria-hidden>｜</span>
+      <Link href={href(sort, view === "catalog" ? "list" : "catalog")} className={view === "catalog" ? "on" : undefined}>
+        {view === "catalog" ? "リスト表示" : "カタログ"}
+      </Link>
+    </nav>
+  );
+}
+
+export function PostTile({ post, now }: { post: DbPost; now: Date }) {
+  const a = authorById(post.author_id);
+  const color = a?.color ?? "#666";
+  const rem = remaining(post.expires_at, now);
+  return (
+    <article className="bd-tile">
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <Avatar name={a?.name ?? post.author_name} color={color} size={38} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontWeight: 700, fontSize: 13.5, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {post.author_name}
+          </div>
+          <div style={{ fontSize: 11.5, color: "rgba(20,22,28,0.55)" }}>
+            {post.genre}・{ageLabel(post.created_at, now)}・No.{post.id}
+          </div>
+        </div>
+      </div>
+      <p className="bd-tile-body">{post.body}</p>
+      <div style={{ fontSize: 11.5, fontWeight: 700, color: rem.urgent ? "#c0392b" : "rgba(20,22,28,0.45)" }}>
+        {rem.label}で自動削除{post.tier === "guest" ? "（ゲスト投稿：1時間）" : "（会員投稿：8時間）"}
+      </div>
+    </article>
   );
 }
 
@@ -129,12 +200,14 @@ export function BoardShell({
   heading,
   sub,
   children,
+  layout = "list",
 }: {
   active: string;
   posts: DbPost[];
   heading: React.ReactNode;
   sub: string;
   children?: React.ReactNode;
+  layout?: "list" | "catalog";
 }) {
   const now = new Date();
   return (
@@ -147,12 +220,21 @@ export function BoardShell({
           <GenreChips active={active} />
         </div>
         {children}
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, paddingBottom: 56, marginTop: 18 }}>
-          {posts.map((p) => (
-            <PostCard key={p.id} post={p} now={now} />
-          ))}
-          {posts.length === 0 && <p>いま表示できる投稿はありません（投稿は時間で自動削除されます）。</p>}
-        </div>
+        {layout === "catalog" ? (
+          <div className="bd-catalog">
+            {posts.map((p) => (
+              <PostTile key={p.id} post={p} now={now} />
+            ))}
+            {posts.length === 0 && <p>いま表示できる投稿はありません（投稿は時間で自動削除されます）。</p>}
+          </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 14, paddingBottom: 56, marginTop: 18 }}>
+            {posts.map((p) => (
+              <PostCard key={p.id} post={p} now={now} />
+            ))}
+            {posts.length === 0 && <p>いま表示できる投稿はありません（投稿は時間で自動削除されます）。</p>}
+          </div>
+        )}
         <footer className="bd-footer">
           PatternB Board（仮称） — サイト制作パッケージ「パターンB（掲示板型）」の公開テスト版 v0。人物は架空のサンプルです。投稿は自動削除されます（ゲスト1時間／会員8時間）。
         </footer>

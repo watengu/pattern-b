@@ -1,6 +1,6 @@
 import { GENRES } from "@/lib/data";
 
-export function PostForm({ defaultGenre }: { defaultGenre?: string }) {
+export function PostForm({ defaultGenre, fixedGenre }: { defaultGenre?: string; fixedGenre?: string }) {
   return (
     <section id="post-form" className="bd-form">
       <h2>ゲストで投稿する（1時間で自動削除）</h2>
@@ -10,16 +10,24 @@ export function PostForm({ defaultGenre }: { defaultGenre?: string }) {
             名前
             <input name="name" maxLength={20} placeholder="ゲストさん" />
           </label>
-          <label>
-            ジャンル
-            <select name="genre" defaultValue={defaultGenre ?? GENRES[0]}>
-              {GENRES.map((g) => (
-                <option key={g} value={g}>
-                  {g}
-                </option>
-              ))}
-            </select>
-          </label>
+          {fixedGenre ? (
+            <label>
+              ジャンル
+              <span className="bd-form-fixed">{fixedGenre}板（この板に固定）</span>
+              <input type="hidden" name="genre" value={fixedGenre} />
+            </label>
+          ) : (
+            <label>
+              ジャンル
+              <select name="genre" defaultValue={defaultGenre ?? GENRES[0]}>
+                {GENRES.map((g) => (
+                  <option key={g} value={g}>
+                    {g}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <label>
             種別
             <select name="kind" defaultValue="ポスト">
